@@ -3,29 +3,22 @@
 const parsePackageName = require('parse-packagejson-name');
 const gulp = require('gulp');
 const gulp_clean = require('gulp-clean');
-const gulp_concat = require('gulp-concat');
 const gulp_sourcemaps = require('gulp-sourcemaps');
 const gulp_babel = require('gulp-babel');
-const gulp_rename = require('gulp-rename');
 const gulp_terser = require('gulp-terser');
 const gulp_eslint = require('gulp-eslint');
+const webpack = require('webpack-stream');
+const named = require('vinyl-named');
 const gulp_jsdoc = require('gulp-jsdoc3');
 const gulp_jest = require('gulp-jest').default;
 
-exports.tasks = ({ sources, packageJSON }) => {
+exports.tasks = ({ packageJSON }) => {
   const tasks = {};
   const PACKAGE_NAME = parsePackageName(packageJSON.name).fullName;
 
   tasks.clean = function clean() {
     return gulp.src(['build/*', 'docs/jsdoc/*'], { read: false })
       .pipe(gulp_clean());
-  };
-
-  tasks.concat = function concat() {
-    const globs = sources.map((sourceFile) => `src/${sourceFile}.js`);
-    return gulp.src(globs)
-      .pipe(gulp_sourcemaps.init())
-      .pipe(gulp_concat(`${PACKAGE_NAME}.js`));
   };
 
   // Linting ///////////////////////////////////////////////////////////////////
@@ -41,48 +34,46 @@ exports.tasks = ({ sources, packageJSON }) => {
 
   // Transpilation /////////////////////////////////////////////////////////////
 
-  tasks.es8 = function es8() {
-    return tasks.concat()
-      .pipe(gulp_babel({
+  tasks.esm = function esm() {
+    return gulp.src('src/**/*.js')
+      .pipe(gulp_sourcemaps.init())
+      .pipe(gulp_babel(packageJSON.babel || {
         plugins: [
           '@babel/plugin-proposal-class-properties',
         ],
       }))
-      .pipe(gulp_rename(`${PACKAGE_NAME}-es8.js`))
-      .pipe(gulp_terser())
-      .pipe(gulp_sourcemaps.write('.'))
-      .pipe(gulp.dest('build/'));
-  };
-
-  tasks.commonjs = function commonjs() {
-    return tasks.concat()
-      .pipe(gulp_babel({
-        plugins: [
-          '@babel/plugin-transform-modules-commonjs',
-          '@babel/plugin-proposal-class-properties',
-        ],
+      .pipe(gulp_terser({
+        ecma: 8,
+        module: true,
       }))
-      .pipe(gulp_rename(`${PACKAGE_NAME}-common.js`))
-      .pipe(gulp_terser())
       .pipe(gulp_sourcemaps.write('.'))
-      .pipe(gulp.dest('build/'));
+      .pipe(gulp.dest('dist/'));
   };
 
   tasks.umd = function umd() {
-    return tasks.concat()
-      .pipe(gulp_babel({
-        plugins: [
-          '@babel/plugin-transform-modules-umd',
-          '@babel/plugin-proposal-class-properties',
-        ],
+    return gulp.src('src/index.js')
+      .pipe(named())
+      .pipe(webpack({
+        mode: 'production',
+        output: {
+          filename: `${PACKAGE_NAME}.js`,
+          libraryTarget: 'umd',
+          // Workaround of a webpack bug: <https://github.com/webpack/webpack/issues/6784>.
+          globalObject: 'typeof self !== \'undefined\' ? self : this',
+        },
+        module: {
+          rules: [{
+            test: /\.jsx?$/,
+            use: ['babel-loader'],
+            exclude: /node_modules/,
+          }],
+        },
+        devtool: 'source-map',
       }))
-      .pipe(gulp_terser())
-      .pipe(gulp_sourcemaps.write('.'))
-      .pipe(gulp.dest('build/'));
+      .pipe(gulp.dest('dist/'));
   };
 
-  tasks.build = gulp.series(tasks.clean, tasks.lint,
-    gulp.parallel(tasks.es8, tasks.commonjs, tasks.umd));
+  tasks.build = gulp.series(tasks.lint, tasks.clean, tasks.umd, tasks.esm);
 
   // Testing ///////////////////////////////////////////////////////////////////
 
