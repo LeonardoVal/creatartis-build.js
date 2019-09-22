@@ -2,7 +2,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const parsePackageName = require('parse-packagejson-name');
 const gulp = require('gulp');
-const gulp_clean = require('gulp-clean');
+const del = require('del');
 const gulp_sourcemaps = require('gulp-sourcemaps');
 const gulp_babel = require('gulp-babel');
 const gulp_terser = require('gulp-terser');
@@ -17,8 +17,7 @@ exports.tasks = ({ packageJSON }) => {
   const PACKAGE_NAME = parsePackageName(packageJSON.name).fullName;
 
   tasks.clean = function clean() {
-    return gulp.src(['build/*', 'docs/jsdoc/*'], { read: false })
-      .pipe(gulp_clean());
+    return del(['build/*', 'docs/jsdoc/*']);
   };
 
   // Linting ///////////////////////////////////////////////////////////////////
