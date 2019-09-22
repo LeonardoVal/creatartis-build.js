@@ -50,7 +50,7 @@ exports.tasks = (args) => {
   }
 
   if (copyFiles && copyFiles.length) {
-    tasks.copy = gulp.series(...copyFiles.map(({ src, dest }) => () => {
+    tasks.copy = gulp.series(...copyFiles.map(({ src, dest }) => function copy() {
       if (dest.endsWith(path.sep)) {
         return gulp.src(src).pipe(gulp.dest(dest));
       }
