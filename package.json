@@ -19,7 +19,10 @@
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-transform-modules-commonjs": "^7.5.0",
     "@babel/plugin-transform-modules-umd": "^7.2.0",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.2",
     "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "del": "^5.1.0",
     "eslint": "^6.2.2",
@@ -41,7 +44,21 @@
   "devDependencies": {},
   "scripts": {
     "build": "gulp build",
-    "test": "gulp test"
+    "test": "gulp test",
+    "publish:verdaccio": "npm publish --registry http://localhost:4873",
+    "republish:verdaccio": "npm unpublish --registry http://localhost:4873 --force && npm run publish:verdaccio"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ]
   },
   "eslintConfig": {
     "env": {
@@ -63,13 +80,16 @@
   ],
   "jest": {
     "setupFilesAfterEnv": [
-      "./test/jest-setup.js"
+      "./src/jest-setup.js"
     ],
     "testPathIgnorePatterns": [
       "node_modules/",
       "src/",
-      "test/"
+      "dist/"
     ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
     "verbose": true
   }
 }
