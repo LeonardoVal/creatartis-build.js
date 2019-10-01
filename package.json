@@ -1,8 +1,13 @@
 {
   "name": "@creatartis/creatartis-build",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha",
   "description": "Build setup for Creatartis' projects",
-  "main": "creatartis-build.js",
+  "main": "dist/creatartis-build.js",
+  "files": [
+    "dist/",
+    "LICENSE.md",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "http://github.com/LeonardoVal/randomness.js"
@@ -54,7 +59,7 @@
     "rules": {}
   },
   "eslintIgnore": [
-    "build/**/*.js"
+    "dist/**/*.js"
   ],
   "jest": {
     "setupFilesAfterEnv": [
