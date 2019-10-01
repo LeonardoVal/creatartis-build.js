@@ -120,7 +120,7 @@ exports.tasks = (args) => {
             '@babel/plugin-proposal-class-properties',
           ],
         }))
-        .pipe(gulp.dest('dist/__tests__')); //TODO Allow configuration.
+        .pipe(gulp.dest('dist/__tests__')); // TODO Allow configuration.
     };
 
     tasks.jest = function jest() {
