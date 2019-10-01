@@ -9,6 +9,5 @@ Object.assign(exports, build.tasks({
     { src: 'src/index.js', dest: 'dist/creatartis-build.js' },
     { src: 'src/jest-setup.js', dest: 'dist/' },
   ],
-  specFiles: false,
   jsdocFiles: false,
 }));
