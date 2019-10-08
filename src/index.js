@@ -24,7 +24,7 @@ exports.tasks = (args) => {
     esmFiles = ['src/**/*.js'],
     umdIndex = 'src/index.js',
     copyFiles = [],
-    specFiles = ['test/specs/*.js'],
+    specFiles = ['test/specs/*.test.js'],
     jsdocFiles = ['README.md', 'src/**/*.js'],
   } = args;
   const tasks = {};
@@ -112,25 +112,14 @@ exports.tasks = (args) => {
   // Testing ///////////////////////////////////////////////////////////////////
 
   if (specFiles && specFiles.length) {
-    tasks.specs = function specs() {
-      return gulp.src(specFiles)
-        .pipe(gulp_babel({
-          plugins: [
-            '@babel/plugin-transform-modules-umd',
-            '@babel/plugin-proposal-class-properties',
-          ],
-        }))
-        .pipe(gulp.dest('dist/__tests__')); // TODO Allow configuration.
-    };
-
     tasks.jest = function jest() {
-      return gulp.src('dist/__tests__')
+      return gulp.src(specFiles)
         .pipe(gulp_jest({
           ...packageJSON.jest,
         }));
     };
 
-    tasks.test = gulp.series(tasks.specs, tasks.jest);
+    tasks.test = gulp.series(tasks.jest);
   }
 
   // Documentation /////////////////////////////////////////////////////////////
