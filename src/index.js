@@ -24,7 +24,7 @@ exports.tasks = (args) => {
     esmFiles = ['src/**/*.js'],
     umdIndex = 'src/index.js',
     copyFiles = [],
-    specFiles = ['test/specs/*.test.js'],
+    specFiles = ['test/specs'],
     jsdocFiles = ['README.md', 'src/**/*.js'],
   } = args;
   const tasks = {};
