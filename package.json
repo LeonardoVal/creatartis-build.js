@@ -1,6 +1,6 @@
 {
   "name": "@creatartis/creatartis-build",
-  "version": "0.0.1-alpha",
+  "version": "0.0.1",
   "description": "Build setup for Creatartis' projects",
   "main": "dist/creatartis-build.js",
   "files": [
@@ -43,9 +43,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build": "gulp build",
+    "build": "gulp default",
     "test": "gulp test",
-    "publish:verdaccio": "gulp && npm publish --registry http://localhost:4873",
+    "publish:verdaccio": "npm run build && npm publish --registry http://localhost:4873",
     "republish:verdaccio": "npm unpublish --registry http://localhost:4873 --force && npm run publish:verdaccio"
   },
   "babel": {
