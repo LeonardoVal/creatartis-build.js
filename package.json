@@ -1,6 +1,6 @@
 {
   "name": "@creatartis/creatartis-build",
-  "version": "0.0.2-alpha",
+  "version": "0.0.2",
   "description": "Build setup for Creatartis' projects",
   "main": "dist/creatartis-build.js",
   "files": [
