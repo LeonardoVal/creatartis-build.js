@@ -1,6 +1,6 @@
 {
   "name": "@creatartis/creatartis-build",
-  "version": "0.0.1",
+  "version": "0.0.2-alpha",
   "description": "Build setup for Creatartis' projects",
   "main": "dist/creatartis-build.js",
   "files": [
@@ -36,7 +36,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-terser": "^1.2.0",
-    "jest-cli": "^24.9.0",
+    "jest-cli": "^25.1.0",
     "parse-packagejson-name": "^1.0.1",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^5.2.1"
