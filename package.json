@@ -50,45 +50,10 @@
     "republish:verdaccio": "npm unpublish --registry http://localhost:4873 --force && npm run publish:verdaccio"
   },
   "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ]
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties",
-      [
-        "@babel/plugin-proposal-decorators",
-        {
-          "legacy": true
-        }
-      ],
-      "@babel/plugin-syntax-bigint"
-    ]
+    "extends": "./src/babelConfig.json"
   },
   "eslintConfig": {
-    "env": {
-      "browser": true,
-      "es6": true
-    },
-    "extends": [
-      "airbnb-base"
-    ],
-    "globals": {},
-    "parser": "babel-eslint",
-    "parserOptions": {
-      "ecmaVersion": 2018
-    },
-    "rules": {
-      "class-methods-use-this": 0,
-      "no-underscore-dangle": 0,
-      "object-curly-newline": 0
-    }
+    "extends": "./src/eslintConfig.json"
   },
   "eslintIgnore": [
     "dist/**/*.js"
