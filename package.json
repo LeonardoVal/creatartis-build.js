@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "description": "Build setup for Creatartis' projects",
   "main": "dist/creatartis-build.js",
-  "files": ["dist/", "LICENSE.md", "README.md"],
+  "files": [
+    "dist/",
+    "LICENSE.md",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "http://github.com/LeonardoVal/randomness.js"
@@ -11,19 +15,19 @@
   "author": "Leonardo Val",
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.10.4",
+    "@babel/core": "^7.11.4",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/plugin-proposal-decorators": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
     "@babel/plugin-syntax-bigint": "^7.8.3",
     "@babel/plugin-transform-modules-commonjs": "^7.10.4",
     "@babel/plugin-transform-modules-umd": "^7.10.4",
     "@babel/polyfill": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^26.1.0",
+    "babel-jest": "^26.3.0",
     "babel-loader": "^8.1.0",
     "del": "^5.1.0",
-    "eslint": "^7.4.0",
+    "eslint": "^7.7.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
     "gulp": "^4.0.2",
@@ -33,11 +37,10 @@
     "gulp-jsdoc3": "^3.0.0",
     "gulp-rename": "^2.0.0",
     "gulp-sourcemaps": "^2.6.5",
-    "gulp-terser": "^1.2.0",
+    "gulp-terser": "^1.4.0",
     "jest-cli": "^24.9.0",
-    "parse-packagejson-name": "^1.0.1",
     "vinyl-named": "^1.1.0",
-    "webpack-stream": "^5.2.1"
+    "webpack-stream": "^6.0.0"
   },
   "devDependencies": {},
   "scripts": {
@@ -48,26 +51,57 @@
   },
   "babel": {
     "presets": [
-      ["@babel/preset-env", { "targets": { "node": "current" } }]
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
     ],
     "plugins": [
       "@babel/plugin-proposal-class-properties",
-      ["@babel/plugin-proposal-decorators", { "legacy": true }],
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ],
       "@babel/plugin-syntax-bigint"
     ]
   },
   "eslintConfig": {
-    "env": { "browser": true, "es6": true },
-    "extends": ["airbnb-base"],
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "extends": [
+      "airbnb-base"
+    ],
     "globals": {},
     "parser": "babel-eslint",
-    "parserOptions": { "ecmaVersion": 2018 },
-    "rules": {}
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "rules": {
+      "class-methods-use-this": 0,
+      "no-underscore-dangle": 0,
+      "object-curly-newline": 0
+    }
   },
-  "eslintIgnore": ["dist/**/*.js"],
+  "eslintIgnore": [
+    "dist/**/*.js"
+  ],
   "jest": {
-    "setupFilesAfterEnv": ["./src/jest-setup.js"],
-    "testPathIgnorePatterns": ["node_modules/", "src/", "dist/"],
+    "setupFilesAfterEnv": [
+      "./src/jest-setup.js"
+    ],
+    "testPathIgnorePatterns": [
+      "node_modules/",
+      "src/",
+      "dist/"
+    ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     },

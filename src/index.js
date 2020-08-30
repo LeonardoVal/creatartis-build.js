@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 /* eslint-disable import/no-extraneous-dependencies */
-const parsePackageName = require('parse-packagejson-name');
 const path = require('path');
 const gulp = require('gulp');
 const del = require('del');
@@ -14,7 +13,30 @@ const named = require('vinyl-named');
 const gulp_jsdoc = require('gulp-jsdoc3');
 const gulp_jest = require('gulp-jest').default;
 
+// Utilities ///////////////////////////////////////////////////////////////////
+
 const defined = (...args) => args.filter((x) => typeof x !== 'undefined');
+
+const parsePackageName = (name) => {
+  const nameRegExp = /^(?:@([^/]+)\/)?(([^.]+)(?:\.(.*))?)$/;
+  const returnObject = {
+    scope: null,
+    fullName: '',
+    projectName: '',
+    moduleName: '',
+  };
+  const match = (typeof name === 'object' ? (name.name || '') : name || '')
+    .match(nameRegExp);
+  if (match) {
+    returnObject.scope = match[1] || null;
+    returnObject.fullName = match[2] || match[0];
+    returnObject.projectName = match[3] === match[2] ? null : match[3];
+    returnObject.moduleName = match[4] || match[2] || null;
+  }
+  return returnObject;
+};
+
+// Tasks ///////////////////////////////////////////////////////////////////////
 
 exports.tasks = (args) => {
   const {
@@ -24,6 +46,7 @@ exports.tasks = (args) => {
     esmFiles = ['src/**/*.js'],
     umdIndex = 'src/index.js',
     copyFiles = [],
+    afterBuild = [],
     specFiles = ['test/specs'],
     jsdocFiles = ['README.md', 'src/**/*.js'],
   } = args;
@@ -107,7 +130,7 @@ exports.tasks = (args) => {
   }
 
   tasks.build = gulp.series(...defined(tasks.lint, tasks.clean, tasks.umd,
-    tasks.esm, tasks.copy));
+    tasks.esm, tasks.copy, ...afterBuild));
 
   // Testing ///////////////////////////////////////////////////////////////////
 
