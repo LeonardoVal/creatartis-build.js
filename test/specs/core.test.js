@@ -1,8 +1,14 @@
-/* globals describe it expect */
-import build from '../../src/index';
+import build from '../../src/creatartis-build';
 
 describe('Test', () => {
   it('layout', () => {
-    expect(build.tasks).toBeOfType('function');
+    const { execTask, run, TASKS } = build;
+    expect(execTask).toBeOfType('function');
+    expect(run).toBeOfType('function');
+    expect(TASKS).toBeOfType(Array);
+    TASKS.forEach(([selector, taskFunction]) => {
+      expect(selector).toBeOfType(RegExp);
+      expect(taskFunction).toBeOfType('function');
+    });
   });
 });
