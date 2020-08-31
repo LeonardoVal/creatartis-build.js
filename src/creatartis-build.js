@@ -40,27 +40,33 @@ async function taskTest() {
   `);
 }
 
-async function taskClean() {
+async function taskBuild(type) {
   await fs.rmdir('./dist', { recursive: true });
-}
-
-async function taskBuildUMD() {
-  return run(`
-    webpack src/index.js --config ${path.join(__dirname, 'webpack-config.js')}
-  `);
-}
-
-async function taskBuildESM() {
-  return run(`
-    npx babel src/ --out-dir dist/
-  `);
+  if (!type || type === 'umd') {
+    await run(`
+      webpack src/index.js --config ${path.join(__dirname, 'webpack-config.js')}
+    `);
+  }
+  if (!type || type === 'esm') {
+    await run(`
+      npx babel src/ --out-dir dist/
+    `);
+  }
 }
 
 async function taskDoc() {
   await fs.rmdir('./docs/jsdoc', { recursive: true });
-  return run(`
+  await run(`
     npx jsdoc README.md src/ -c ${path.join(__dirname, 'jsdoc-config.js')}
   `);
+}
+
+async function taskPublish(registry) {
+  if (registry === 'verdaccio') {
+    await run(`
+      npm publish --registry http://localhost:4873
+    `);
+  }
 }
 
 const TASKS = [
@@ -68,18 +74,17 @@ const TASKS = [
   [/lint/, taskLint],
   [/test:specs/, taskTest],
   [/test/, taskTest],
-  [/build:umd/, taskClean, taskBuildUMD],
-  [/build:esm/, taskClean, taskBuildESM],
-  [/build/, taskClean, taskBuildUMD, taskBuildESM],
+  [/build(?::(\w+))/, taskBuild],
   [/doc/, taskDoc],
-  [/default/, taskLint, taskClean, taskBuildUMD, taskBuildESM, taskTest, taskDoc],
+  [/default/, taskLint, taskBuild, taskTest, taskDoc],
+  [/publish(?::(\w+))/, taskPublish],
 ];
 
 async function execTask(id) {
   for (const [selector, ...taskFunctions] of TASKS) {
     const match = (new RegExp(`^${selector.source}$`)).exec(id);
     if (match) {
-      console.log(`🚧 Executing ${id}...`);
+      console.log(`\n🚧 Executing ${id}...`);
       for (const taskFunction of taskFunctions) {
         await taskFunction(...match.slice(1));
       }

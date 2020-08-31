@@ -1,8 +1,9 @@
 {
   "name": "@creatartis/creatartis-build",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Build setup for Creatartis' projects",
   "main": "dist/creatartis-build.js",
+  "bin": "dist/creatartis-build.js",
   "files": [
     "dist/",
     "LICENSE.md",
@@ -49,9 +50,9 @@
     "webpack-cli": "^3.3.12"
   },
   "scripts": {
-    "build": "gulp default",
-    "test": "gulp test",
-    "publish:verdaccio": "npm run build && npm publish --registry http://localhost:4873",
+    "build": "node src/creatartis-build.js lint build:esm test doc",
+    "test": "node src/creatartis-build.js lint test",
+    "publish:verdaccio": "node src/creatartis-build.js lint build:esm test publish:verdaccio",
     "republish:verdaccio": "npm unpublish --registry http://localhost:4873 --force && npm run publish:verdaccio"
   },
   "babel": {
