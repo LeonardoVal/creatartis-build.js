@@ -3,7 +3,9 @@
   "version": "0.2.0",
   "description": "Build setup for Creatartis' projects",
   "main": "dist/creatartis-build.js",
-  "bin": "dist/creatartis-build.js",
+  "bin": {
+    "creatartis-build": "./dist/creatartis-build.js"
+  },
   "files": [
     "dist/",
     "LICENSE.md",

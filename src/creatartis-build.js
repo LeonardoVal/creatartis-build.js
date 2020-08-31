@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop, no-restricted-syntax, no-unused-vars */
 const { spawn } = require('child_process');
