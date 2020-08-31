@@ -40,23 +40,25 @@ async function taskTest() {
   `);
 }
 
-async function taskBuildUMD() {
+async function taskClean() {
   await fs.rmdir('./dist', { recursive: true });
-  await run(`
-    npx webpack src/index.js --config ${path.join(__dirname, 'webpack-config.js')}
+}
+
+async function taskBuildUMD() {
+  return run(`
+    webpack src/index.js --config ${path.join(__dirname, 'webpack-config.js')}
   `);
 }
 
 async function taskBuildESM() {
-  await fs.rmdir('./dist', { recursive: true });
-  await run(`
-    npx babel src/ --out-dir dist/ --source-maps true --minified 
+  return run(`
+    npx babel src/ --out-dir dist/
   `);
 }
 
 async function taskDoc() {
   await fs.rmdir('./docs/jsdoc', { recursive: true });
-  await run(`
+  return run(`
     npx jsdoc README.md src/ -c ${path.join(__dirname, 'jsdoc-config.js')}
   `);
 }
@@ -66,10 +68,11 @@ const TASKS = [
   [/lint/, taskLint],
   [/test:specs/, taskTest],
   [/test/, taskTest],
-  [/build:umd/, taskBuildUMD],
-  [/build:esm/, taskBuildESM],
-  [/build/, taskBuildUMD, taskBuildESM],
+  [/build:umd/, taskClean, taskBuildUMD],
+  [/build:esm/, taskClean, taskBuildESM],
+  [/build/, taskClean, taskBuildUMD, taskBuildESM],
   [/doc/, taskDoc],
+  [/default/, taskLint, taskClean, taskBuildUMD, taskBuildESM, taskTest, taskDoc],
 ];
 
 async function execTask(id) {

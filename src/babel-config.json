@@ -1,4 +1,6 @@
 {
+  "comments": false,
+  "minified": true,
   "presets": [
     [
       "@babel/preset-env",
@@ -28,5 +30,6 @@
     "@babel/plugin-syntax-bigint",
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-syntax-import-meta"
-  ]
+  ],
+  "sourceMaps": "inline"
 }
