@@ -33,7 +33,7 @@ module.exports = {
     }],
   },
   output: {
-    filename: `dist/${PACKAGE_NAME}.js`,
+    filename: `${PACKAGE_NAME}.js`,
     libraryTarget: 'umd',
     // Workaround of a webpack bug: <https://github.com/webpack/webpack/issues/6784>.
     globalObject: 'typeof self !== \'undefined\' ? self : this',
