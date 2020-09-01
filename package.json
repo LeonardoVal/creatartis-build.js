@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/LeonardoVal/randomness.js"
+    "url": "http://github.com/LeonardoVal/creatartis-build.js"
   },
   "author": "Leonardo Val",
   "license": "MIT",
@@ -58,12 +58,13 @@
     "republish:verdaccio": "npm unpublish --registry http://localhost:4873 --force && npm run publish:verdaccio"
   },
   "babel": {
-    "extends": "./src/babel-config.json"
+    "extends": "./src/babel-config.js"
   },
   "eslintConfig": {
-    "extends": "./src/eslint-config.json"
+    "extends": "./src/eslint-config.js"
   },
   "eslintIgnore": [
-    "dist/**/*.js"
+    "dist/",
+    "node_modules/"
   ]
 }
