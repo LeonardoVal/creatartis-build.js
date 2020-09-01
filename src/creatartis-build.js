@@ -75,7 +75,7 @@ const TASKS = [
   [/lint/, taskLint],
   [/test:specs/, taskTest],
   [/test/, taskTest],
-  [/build(?::(\w+))/, taskBuild],
+  [/build(?::(\w+))?/, taskBuild],
   [/doc/, taskDoc],
   [/default/, taskLint, taskBuild, taskTest, taskDoc],
   [/publish(?::(\w+))/, taskPublish],
@@ -85,7 +85,7 @@ async function execTask(id) {
   for (const [selector, ...taskFunctions] of TASKS) {
     const match = (new RegExp(`^${selector.source}$`)).exec(id);
     if (match) {
-      console.log(`\n🚧 Executing ${id}...`);
+      console.log(`🚧 Executing ${id}...`);
       for (const taskFunction of taskFunctions) {
         await taskFunction(...match.slice(1));
       }
