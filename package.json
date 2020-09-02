@@ -1,8 +1,11 @@
 {
   "name": "@creatartis/creatartis-build",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Build setup for Creatartis' projects",
   "main": "dist/creatartis-build.js",
+  "bin": {
+    "creatartis-build": "./dist/creatartis-build.js"
+  },
   "files": [
     "dist/",
     "LICENSE.md",
@@ -10,15 +13,26 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/LeonardoVal/randomness.js"
+    "url": "http://github.com/LeonardoVal/creatartis-build.js"
   },
   "author": "Leonardo Val",
   "license": "MIT",
   "dependencies": {
+    "@babel/cli": "^7.10.5",
     "@babel/core": "^7.11.4",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/plugin-proposal-decorators": "^7.10.5",
+    "@babel/plugin-proposal-export-default-from": "^7.10.4",
+    "@babel/plugin-proposal-export-namespace-from": "^7.10.4",
+    "@babel/plugin-proposal-function-sent": "^7.10.4",
+    "@babel/plugin-proposal-json-strings": "^7.10.4",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.11.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.10.4",
     "@babel/plugin-syntax-bigint": "^7.8.3",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-syntax-import-meta": "^7.10.4",
     "@babel/plugin-transform-modules-commonjs": "^7.10.4",
     "@babel/plugin-transform-modules-umd": "^7.10.4",
     "@babel/polyfill": "^7.10.4",
@@ -26,85 +40,31 @@
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.3.0",
     "babel-loader": "^8.1.0",
-    "del": "^5.1.0",
     "eslint": "^7.7.0",
+    "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-eslint": "^6.0.0",
-    "gulp-jest": "^4.0.3",
-    "gulp-jsdoc3": "^3.0.0",
-    "gulp-rename": "^2.0.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-terser": "^1.4.0",
+    "eslint-plugin-jest": "^23.20.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.6",
     "jest-cli": "^24.9.0",
-    "vinyl-named": "^1.1.0",
-    "webpack-stream": "^6.0.0"
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
-  "devDependencies": {},
   "scripts": {
-    "build": "gulp default",
-    "test": "gulp test",
-    "publish:verdaccio": "npm run build && npm publish --registry http://localhost:4873",
+    "build": "node src/creatartis-build.js lint build:esm test doc",
+    "test": "node src/creatartis-build.js lint test",
+    "publish:verdaccio": "node src/creatartis-build.js lint build:esm test publish:verdaccio",
     "republish:verdaccio": "npm unpublish --registry http://localhost:4873 --force && npm run publish:verdaccio"
   },
   "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ]
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties",
-      [
-        "@babel/plugin-proposal-decorators",
-        {
-          "legacy": true
-        }
-      ],
-      "@babel/plugin-syntax-bigint"
-    ]
+    "extends": "./src/babel-config.js"
   },
   "eslintConfig": {
-    "env": {
-      "browser": true,
-      "es6": true
-    },
-    "extends": [
-      "airbnb-base"
-    ],
-    "globals": {},
-    "parser": "babel-eslint",
-    "parserOptions": {
-      "ecmaVersion": 2018
-    },
-    "rules": {
-      "class-methods-use-this": 0,
-      "no-underscore-dangle": 0,
-      "object-curly-newline": 0
-    }
+    "extends": "./src/eslint-config.js"
   },
   "eslintIgnore": [
-    "dist/**/*.js"
-  ],
-  "jest": {
-    "setupFilesAfterEnv": [
-      "./src/jest-setup.js"
-    ],
-    "testPathIgnorePatterns": [
-      "node_modules/",
-      "src/",
-      "dist/"
-    ],
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "verbose": true
-  }
+    "dist/",
+    "node_modules/"
+  ]
 }
