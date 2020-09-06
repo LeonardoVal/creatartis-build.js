@@ -1,4 +1,3 @@
-/* eslint-disable valid-typeof */
 global.expect.extend({
   /** Tests the type of the received value. If `type` is a string the `typeof`
    * operator is used. Else it is assumed `type` is a function, and the
@@ -6,6 +5,7 @@ global.expect.extend({
   */
   toBeOfType(received, type) {
     const pass = typeof type === 'string'
+      // eslint-disable-next-line valid-typeof
       ? (typeof received === type)
       : (received instanceof type);
     if (pass) {

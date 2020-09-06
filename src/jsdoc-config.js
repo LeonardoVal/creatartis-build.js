@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-dynamic-require
 const { jsdoc } = require(`${process.cwd()}/package.json`);
 
 module.exports = {

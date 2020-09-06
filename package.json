@@ -61,7 +61,14 @@
     "extends": "./src/babel-config.js"
   },
   "eslintConfig": {
-    "extends": "./src/eslint-config.js"
+    "extends": "./src/eslint-config.js",
+    "rules": {
+      "no-await-in-loop": 0,
+      "no-console": 0,
+      "import/no-dynamic-require": 0,
+      "no-restricted-syntax": 0, 
+      "no-unused-vars": 0
+    }
   },
   "eslintIgnore": [
     "dist/",

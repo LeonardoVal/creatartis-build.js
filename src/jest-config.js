@@ -1,5 +1,5 @@
 const path = require('path');
-// eslint-disable-next-line import/no-dynamic-require
+
 const { jest } = require(`${process.cwd()}/package.json`);
 
 module.exports = {
