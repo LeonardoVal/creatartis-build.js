@@ -2,7 +2,7 @@
 const { spawn } = require('child_process');
 const { promises: fs } = require('fs');
 const path = require('path');
-// eslint-disable-next-line import/no-dynamic-require
+
 const packageJSON = require(`${process.cwd()}/package.json`);
 
 // Utilities ///////////////////////////////////////////////////////////////////
