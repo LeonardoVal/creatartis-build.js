@@ -4,8 +4,8 @@ const { jest } = require(`${process.cwd()}/package.json`);
 
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ['src/'],
-  coverageDirectory: 'test/specs/coverage',
+  collectCoverageFrom: ['src/**/*.{js,jsx}', 'test/**/*.test.{js,jsx}'],
+  coverageDirectory: 'test/specs/coverage/',
   coverageReporters: ['json', 'text-summary'],
   rootDir: process.cwd(),
   setupFilesAfterEnv: [
