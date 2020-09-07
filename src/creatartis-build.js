@@ -10,13 +10,16 @@ const packageJSON = require(`${process.cwd()}/package.json`);
 async function run(script) {
   const commands = script.trim().split(/\s*&&\s*|[\r\n]+/)
     .map((line) => line.trim().split(/[ \t]+/));
+  let result = 0;
   for (const [command, ...args] of commands) {
-    await new Promise((resolve, reject) => {
+    result = await new Promise((resolve, reject) => {
       const childProcess = spawn(command, args, { stdio: 'inherit' });
-      childProcess.on('close', (code) => resolve(code));
+      childProcess.on('exit', (code) => resolve(code || childProcess.exitCode));
       childProcess.on('error', (error) => reject(error));
     });
+    if (result !== 0) break;
   }
+  return result;
 }
 
 // Tasks ///////////////////////////////////////////////////////////////////////
@@ -40,19 +43,22 @@ async function taskTest() {
 
 async function taskBuild(type) {
   await fs.rmdir('./dist', { recursive: true });
+  let result = 0;
   if (!type || type === 'umd') {
-    await run(`
+    result = await run(`
       webpack src/index.js --config ${path.join(__dirname, 'webpack-config.js')}
     `);
+    if (result !== 0) return result;
   }
   if (!type || type === 'esm') {
-    await run('npx babel src/ --out-dir dist/ --source-maps=true');
+    result = await run('npx babel src/ --out-dir dist/ --source-maps=true');
   }
+  return result;
 }
 
 async function taskDoc() {
   await fs.rmdir('./docs/jsdoc', { recursive: true });
-  await run(`
+  return run(`
     npx jsdoc README.md src/ -c ${path.join(__dirname, 'jsdoc-config.js')}
   `);
 }
@@ -68,13 +74,13 @@ function getNPMRegistry(id) {
 async function taskPublish(id) {
   const registryURL = getNPMRegistry(id);
   const registry = registryURL ? `--registry ${registryURL}` : '';
-  await run(`npm publish ${registry}`);
+  return run(`npm publish ${registry}`);
 }
 
 async function taskUnpublish(id) {
   const registryURL = getNPMRegistry(id);
   const registry = registryURL ? `--registry ${registryURL}` : '';
-  await run(`npm unpublish ${registry} --force`);
+  return run(`npm unpublish ${registry} --force`);
 }
 
 const TASKS = [
@@ -91,25 +97,34 @@ const TASKS = [
 ];
 
 async function execTask(id) {
+  let result = 0;
   for (const [selector, ...taskFunctions] of TASKS) {
     const match = (new RegExp(`^${selector.source}$`)).exec(id);
     if (match) {
       console.log(`🚧 Executing ${id}...`);
       for (const taskFunction of taskFunctions) {
-        await taskFunction(...match.slice(1));
+        result = await taskFunction(...match.slice(1));
+        if (result !== 0) break;
       }
-      return;
+      return result;
     }
   }
   console.error(`💥 \x1B[1;31mUnrecognized task ${id}!\x1B[0m`);
+  return 1;
 }
 
 // Main ////////////////////////////////////////////////////////////////////////
 
 async function main() {
+  let result = 0;
   for (const arg of process.argv.slice(2)) {
-    await execTask(arg);
+    result = await execTask(arg);
+    if (result !== 0) {
+      console.error(`💥 \x1B[1;31mTask ${arg} failed! Aborting.\x1B[0m`);
+      break;
+    }
   }
+  process.exit(result);
 }
 
 if (require !== undefined && require.main === module) {
