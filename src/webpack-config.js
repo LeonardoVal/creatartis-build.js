@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-dynamic-require
 const packageJSON = require(`${process.cwd()}/package.json`);
 
 const parsePackageName = (name) => {

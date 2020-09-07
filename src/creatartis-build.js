@@ -1,10 +1,8 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */
-/* eslint-disable no-await-in-loop, no-restricted-syntax, no-unused-vars */
 const { spawn } = require('child_process');
 const { promises: fs } = require('fs');
 const path = require('path');
-// eslint-disable-next-line import/no-dynamic-require
+
 const packageJSON = require(`${process.cwd()}/package.json`);
 
 // Utilities ///////////////////////////////////////////////////////////////////
@@ -29,10 +27,9 @@ function taskPwd() {
 
 async function taskLint() {
   const ignored = ['/dist', '/node_modules', '/docs']
-    .map((pattern) => `--ignore-pattern ${pattern}`).join(' ');
-  return run(`
-    npx eslint . --ext js,jsx --quiet ${ignored}
-  `);
+    .map((pattern) => `--ignore-pattern ${pattern}`)
+    .join(' ');
+  return run(`npx eslint . --ext js,jsx --quiet ${ignored}`);
 }
 
 async function taskTest() {
@@ -49,9 +46,7 @@ async function taskBuild(type) {
     `);
   }
   if (!type || type === 'esm') {
-    await run(`
-      npx babel src/ --out-dir dist/
-    `);
+    await run('npx babel src/ --out-dir dist/ --source-maps=true');
   }
 }
 
@@ -62,12 +57,24 @@ async function taskDoc() {
   `);
 }
 
-async function taskPublish(registry) {
-  if (registry === 'verdaccio') {
-    await run(`
-      npm publish --registry http://localhost:4873
-    `);
-  }
+function getNPMRegistry(id) {
+  if (!id) return null;
+  if (/^(verdaccio|local)$/.test(id)) return 'http://localhost:4873';
+  if (/^(npm)$/.test(id)) return 'https://registry.npmjs.org/';
+  if (/^\d+/.test(id)) return `http://localhost:${id}`;
+  throw new Error(`Unrecognized NPM registry ${id}!`);
+}
+
+async function taskPublish(id) {
+  const registryURL = getNPMRegistry(id);
+  const registry = registryURL ? `--registry ${registryURL}` : '';
+  await run(`npm publish ${registry}`);
+}
+
+async function taskUnpublish(id) {
+  const registryURL = getNPMRegistry(id);
+  const registry = registryURL ? `--registry ${registryURL}` : '';
+  await run(`npm unpublish ${registry} --force`);
 }
 
 const TASKS = [
@@ -79,6 +86,8 @@ const TASKS = [
   [/doc/, taskDoc],
   [/default/, taskLint, taskBuild, taskTest, taskDoc],
   [/publish(?::(\w+))/, taskPublish],
+  [/unpublish(?::(\w+))/, taskUnpublish],
+  [/republish(?::(\w+))/, taskUnpublish, taskPublish],
 ];
 
 async function execTask(id) {
