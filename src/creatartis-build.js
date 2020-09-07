@@ -46,7 +46,7 @@ async function taskBuild(type) {
     `);
   }
   if (!type || type === 'esm') {
-    await run('npx babel src/ --out-dir dist/');
+    await run('npx babel src/ --out-dir dist/ --source-maps=true');
   }
 }
 
