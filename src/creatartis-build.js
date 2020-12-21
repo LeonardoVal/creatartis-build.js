@@ -46,7 +46,7 @@ async function taskBuild(type) {
   let result = 0;
   if (!type || type === 'umd') {
     result = await run(`
-      webpack src/index.js --config ${path.join(__dirname, 'webpack-config.js')}
+      webpack ./src/index.js --config ${path.join(__dirname, 'webpack-config.js')}
     `);
     if (result !== 0) return result;
   }
