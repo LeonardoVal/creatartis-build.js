@@ -13,7 +13,10 @@ async function run(script) {
   let result = 0;
   for (const [command, ...args] of commands) {
     result = await new Promise((resolve, reject) => {
-      const childProcess = spawn(command, args, { stdio: 'inherit' });
+      const childProcess = spawn(command, args, {
+        shell: process.platform === 'win32',
+        stdio: 'inherit',
+      });
       childProcess.on('exit', (code) => resolve(code || childProcess.exitCode));
       childProcess.on('error', (error) => reject(error));
     });
