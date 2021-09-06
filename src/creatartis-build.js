@@ -85,13 +85,13 @@ function getNPMRegistry(id) {
   throw new Error(`Unrecognized NPM registry ${id}!`);
 }
 
-async function taskPublish(id) {
+async function taskRelease(id) {
   const registryURL = getNPMRegistry(id);
   const registry = registryURL ? `--registry ${registryURL}` : '';
   return run(`npm publish ${registry} ./dist`);
 }
 
-async function taskUnpublish(id) {
+async function taskUnrelease(id) {
   const registryURL = getNPMRegistry(id);
   const registry = registryURL ? `--registry ${registryURL}` : '';
   return run(`npm unpublish ${registry} --force`);
@@ -105,9 +105,9 @@ const TASKS = [
   [/build(?::(\w+))?/, taskBuild],
   [/doc/, taskDoc],
   [/default/, taskLint, taskBuild, taskTest, taskDoc],
-  [/publish(?::(\w+))/, taskPublish],
-  [/unpublish(?::(\w+))/, taskUnpublish],
-  [/republish(?::(\w+))/, taskUnpublish, taskPublish],
+  [/release(?::(\w+))?/, taskRelease],
+  [/unrelease(?::(\w+))?/, taskUnrelease],
+  [/rerelease(?::(\w+))/, taskUnrelease, taskRelease],
 ];
 
 async function execTask(id) {
