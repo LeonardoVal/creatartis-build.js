@@ -54,7 +54,7 @@
   "scripts": {
     "build": "node src/creatartis-build.js lint build:esm test doc",
     "test": "node src/creatartis-build.js lint test",
-    "publish:verdaccio": "node src/creatartis-build.js lint build:esm test publish:verdaccio",
+    "publish:verdaccio": "npm run build && node src/creatartis-build.js publish:verdaccio",
     "republish:verdaccio": "npm unpublish --registry http://localhost:4873 --force && npm run publish:verdaccio"
   },
   "babel": {
