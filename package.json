@@ -2,15 +2,10 @@
   "name": "@creatartis/creatartis-build",
   "version": "0.2.3",
   "description": "Build setup for Creatartis' projects",
-  "main": "dist/creatartis-build.js",
+  "main": "creatartis-build.js",
   "bin": {
-    "creatartis-build": "./dist/creatartis-build.js"
+    "creatartis-build": "./creatartis-build.js"
   },
-  "files": [
-    "dist/",
-    "LICENSE.md",
-    "README.md"
-  ],
   "repository": {
     "type": "git",
     "url": "http://github.com/LeonardoVal/creatartis-build.js"
