@@ -22,6 +22,13 @@ async function run(script) {
   return result;
 }
 
+function distPackageJSON() {
+  const {
+    script, devDependencies, files, ...other
+  } = packageJSON;
+  return JSON.stringify(other, null, '  ');
+}
+
 // Tasks ///////////////////////////////////////////////////////////////////////
 
 function taskPwd() {
@@ -43,6 +50,10 @@ async function taskTest() {
 
 async function taskBuild(type) {
   await fs.rmdir('./dist', { recursive: true });
+  await fs.mkdir('./dist');
+  await fs.copyFile('./README.md', './dist/README.md');
+  await fs.copyFile('./LICENSE.md', './dist/LICENSE.md');
+  await fs.writeFile('./dist/package.json', distPackageJSON());
   let result = 0;
   if (!type || type === 'umd') {
     result = await run(`
@@ -74,7 +85,7 @@ function getNPMRegistry(id) {
 async function taskPublish(id) {
   const registryURL = getNPMRegistry(id);
   const registry = registryURL ? `--registry ${registryURL}` : '';
-  return run(`npm publish ${registry}`);
+  return run(`npm publish ${registry} ./dist`);
 }
 
 async function taskUnpublish(id) {
