@@ -19,7 +19,9 @@ const parsePackageName = (name) => {
   return returnObject;
 };
 
-const PACKAGE_NAME = parsePackageName(packageJSON.name).fullName;
+const {
+  fullName: PACKAGE_NAME,
+} = parsePackageName(packageJSON.name);
 
 module.exports = {
   devtool: 'source-map',
