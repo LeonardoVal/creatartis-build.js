@@ -19,7 +19,9 @@ const parsePackageName = (name) => {
   return returnObject;
 };
 
-const PACKAGE_NAME = parsePackageName(packageJSON.name).fullName;
+const {
+  fullName: PACKAGE_NAME,
+} = parsePackageName(packageJSON.name);
 
 module.exports = {
   devtool: 'source-map',
@@ -33,6 +35,7 @@ module.exports = {
   },
   output: {
     filename: `${PACKAGE_NAME}.js`,
+    library: PACKAGE_NAME,
     libraryTarget: 'umd',
     // Workaround of a webpack bug: <https://github.com/webpack/webpack/issues/6784>.
     globalObject: 'typeof self !== \'undefined\' ? self : this',
