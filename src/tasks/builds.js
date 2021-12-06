@@ -3,7 +3,7 @@ const path = require('path');
 const { distPackageJSON, run } = require('./common');
 
 async function taskBuild(type) {
-  await fs.rmdir('./dist', { recursive: true });
+  await fs.rm('./dist', { force: true, recursive: true });
   await fs.mkdir('./dist');
   await fs.copyFile('./README.md', './dist/README.md');
   await fs.copyFile('./LICENSE.md', './dist/LICENSE.md');
