@@ -31,7 +31,7 @@ function distPackageJSON() {
 
 const log = Object.freeze({
   error(msg, ...args) {
-    console.error(`🔴 \x1B[1;31m${msg}!\x1B[0m`, ...args);
+    console.error(`🔴 \x1B[1;91m${msg}!\x1B[0m`, ...args);
   },
   info(msg, ...args) {
     console.log(`🚧 ${msg}`, ...args);
