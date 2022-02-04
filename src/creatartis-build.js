@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 const { run, log } = require('./tasks/common');
 const { taskBuild } = require('./tasks/builds');
-const { taskLint } = require('./tasks/checks');
+const { taskCheck, taskLint } = require('./tasks/checks');
 const { taskDoc } = require('./tasks/docs');
 const { taskPwd } = require('./tasks/other');
 const { taskRelease, taskUnrelease } = require('./tasks/releases');
 const { taskTest } = require('./tasks/tests');
 
 const TASKS = [
-  [/pwd/, taskPwd],
-  [/lint/, taskLint],
-  [/test:specs/, taskTest],
-  [/test/, taskTest],
   [/build(?::(\w+))?/, taskBuild],
-  [/doc/, taskDoc],
+  [/check(?::(\w+))?/, taskCheck],
   [/default/, taskLint, taskBuild, taskTest, taskDoc],
+  [/doc/, taskDoc],
+  [/lint/, taskLint],
+  [/pwd/, taskPwd],
   [/release(?::(\w+))?/, taskRelease],
-  [/unrelease(?::(\w+))?/, taskUnrelease],
   [/rerelease(?::(\w+))/, taskUnrelease, taskRelease],
+  [/test(?::(specs))?/, taskTest],
+  [/unrelease(?::(\w+))?/, taskUnrelease],
 ];
 
 async function execTask(id) {
