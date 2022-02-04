@@ -2,23 +2,11 @@ module.exports = {
   comments: false,
   minified: true,
   presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: {
-          node: 'current',
-        },
-      },
-    ],
+    ['@babel/preset-env', { targets: { node: 'current' } }],
   ],
   plugins: [
     '@babel/plugin-proposal-class-properties',
-    [
-      '@babel/plugin-proposal-decorators',
-      {
-        legacy: true,
-      },
-    ],
+    ['@babel/plugin-proposal-decorators', { legacy: true }],
     '@babel/plugin-proposal-export-default-from',
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-function-sent',

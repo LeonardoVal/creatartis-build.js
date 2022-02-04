@@ -4,9 +4,7 @@ module.exports = {
     es6: true,
     'jest/globals': true,
   },
-  extends: [
-    'airbnb',
-  ],
+  extends: ['airbnb'],
   globals: {
     document: 'readonly',
     window: 'readonly',
@@ -15,10 +13,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
   },
-  plugins: [
-    'react',
-    'jest',
-  ],
+  plugins: ['react', 'jest'],
   rules: {
     'class-methods-use-this': 0,
     'no-underscore-dangle': 0,
