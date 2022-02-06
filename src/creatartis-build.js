@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const packageJSON = require('../package.json');
 const { run, log } = require('./tasks/common');
 const { taskBuild } = require('./tasks/builds');
 const { taskCheck, taskLint } = require('./tasks/checks');
@@ -40,6 +41,7 @@ async function execTask(id) {
 // Main ////////////////////////////////////////////////////////////////////////
 
 async function main() {
+  console.log(`${packageJSON.name}@${packageJSON.version}`);
   let result = 0;
   for (const arg of process.argv.slice(2)) {
     result = await execTask(arg);
