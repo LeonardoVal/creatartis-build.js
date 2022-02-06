@@ -23,8 +23,26 @@ const {
   fullName: PACKAGE_NAME,
 } = parsePackageName(packageJSON.name);
 
+const PACKAGE_DEPS = [
+  ...Object.keys(packageJSON.dependencies),
+  ...Object.keys(packageJSON.devDependencies),
+];
+
 module.exports = {
   devtool: 'source-map',
+  externals: [
+    ({ context, request }, callback) => {
+      const requestPackage = PACKAGE_DEPS.find((dep) => request.startsWith(dep));
+      if (requestPackage) {
+        if (requestPackage !== request) {
+          console.warn(`Warning: importing '${request}' at ${
+            context} may fail if the package ${requestPackage} is bundled.`);
+        }
+        return callback(null, request);
+      }
+      return callback();
+    },
+  ],
   mode: 'production',
   module: {
     rules: [{
