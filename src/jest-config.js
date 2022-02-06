@@ -6,7 +6,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{js,jsx}', 'test/**/*.test.{js,jsx}'],
   coverageDirectory: 'test/specs/coverage/',
-  coverageReporters: ['json', 'text-summary'],
+  coverageReporters: ['lcov', 'text-summary'],
   rootDir: process.cwd(),
   setupFilesAfterEnv: [
     path.join(__dirname, 'jest-setup.js'),
