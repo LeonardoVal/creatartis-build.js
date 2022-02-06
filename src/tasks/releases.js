@@ -11,7 +11,7 @@ function getNPMRegistry(id) {
 async function taskRelease(id) {
   const registryURL = getNPMRegistry(id);
   const registry = registryURL ? `--registry ${registryURL}` : '';
-  return run(`npm publish ${registry} ./dist`);
+  return run(`npm publish ${registry}`);
 }
 
 async function taskUnrelease(id) {

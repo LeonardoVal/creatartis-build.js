@@ -1,10 +1,13 @@
 {
   "name": "@creatartis/creatartis-build",
-  "version": "0.2.6",
+  "version": "0.3.0-alpha",
   "description": "Build setup for Creatartis' projects",
-  "main": "creatartis-build.js",
+  "main": "dist/creatartis-build.js",
+  "files": [
+    "dist/", "LICENSE.md", "README.md"
+  ],
   "bin": {
-    "creatartis-build": "./creatartis-build.js"
+    "creatartis-build": "./dist/creatartis-build.js"
   },
   "repository": {
     "type": "git",
@@ -43,7 +46,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.27.1",
     "jest": "^27.4.3",
-    "jsdoc": "^3.6.7",
+    "jsdoc": "^3.6.10",
     "webpack": "^5.64.4",
     "webpack-cli": "^4.9.1"
   },
