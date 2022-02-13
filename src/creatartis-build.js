@@ -40,21 +40,39 @@ async function execTask(id) {
 
 // Main ////////////////////////////////////////////////////////////////////////
 
-async function main() {
+async function main(args) {
   console.log(`${packageJSON.name}@${packageJSON.version}`);
   let result = 0;
-  for (const arg of process.argv.slice(2)) {
+  for (const arg of args) {
     result = await execTask(arg);
     if (result !== 0) {
       log.error(`Task ${arg} failed! Aborting.`);
       break;
     }
   }
-  process.exit(result);
+  return result;
 }
 
 if (require !== undefined && require.main === module) {
-  main();
+  main(process.argv.slice(2)).then(
+    (result) => process.exit(result),
+    (error) => {
+      console.error(error);
+      process.exit(1);
+    },
+  );
 } else {
-  module.exports = { execTask, run, TASKS };
+  module.exports = {
+    execTask,
+    log,
+    run,
+    taskBuild,
+    taskCheck,
+    taskDoc,
+    taskLint,
+    taskPwd,
+    taskRelease,
+    taskTest,
+    taskUnrelease,
+  };
 }
