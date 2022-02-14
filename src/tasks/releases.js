@@ -1,4 +1,4 @@
-const { distPackageJSON, run } = require('./common');
+const { run } = require('./common');
 
 function getNPMRegistry(id) {
   if (!id) return null;

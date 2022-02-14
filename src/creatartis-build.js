@@ -4,7 +4,7 @@ const { run, log } = require('./tasks/common');
 const { taskBuild } = require('./tasks/builds');
 const { taskCheck, taskLint } = require('./tasks/checks');
 const { taskDoc } = require('./tasks/docs');
-const { taskPwd } = require('./tasks/other');
+const { taskPackageJSON, taskPwd } = require('./tasks/other');
 const { taskRelease, taskUnrelease } = require('./tasks/releases');
 const { taskTest } = require('./tasks/tests');
 
@@ -14,6 +14,7 @@ const TASKS = [
   [/default/, taskLint, taskBuild, taskTest, taskDoc],
   [/doc/, taskDoc],
   [/lint/, taskLint],
+  [/pkg((?:\.[-\w$]+)+)?/, taskPackageJSON],
   [/pwd/, taskPwd],
   [/release(?::(\w+))?/, taskRelease],
   [/rerelease(?::(\w+))/, taskUnrelease, taskRelease],

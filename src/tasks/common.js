@@ -1,7 +1,5 @@
 const { spawn } = require('child_process');
-const path = require('path');
-
-const packageJSON = require(`${process.cwd()}/package.json`);
+const fs = require('fs/promises');
 
 async function run(script) {
   const commands = script.trim().split(/\s*&&\s*|[\r\n]+/)
@@ -22,27 +20,53 @@ async function run(script) {
   return result;
 }
 
-function distPackageJSON() {
-  const {
-    script, devDependencies, files, ...other
-  } = packageJSON;
-  return JSON.stringify(other, null, '  ');
+async function fileExists(path) {
+  return fs.stat(path).then(
+    (stat) => stat.isFile(),
+    () => false,
+  );
+}
+
+async function folderExists(path) {
+  return fs.stat(path).then(
+    (stat) => stat.isDirectory(),
+    () => false,
+  );
+}
+
+function packageJSON() {
+  // eslint-disable-next-line global-require
+  return require(`${process.cwd()}/package.json`);
 }
 
 const log = Object.freeze({
   error(msg, ...args) {
-    console.error(`🔴 \x1B[1;91m${msg}!\x1B[0m`, ...args);
+    console.error(`🔴 \x1B[1;91m${msg}\x1B[0m`, ...args);
+    return 1;
+  },
+  errorIf(cond, msg, ...args) {
+    return cond ? this.error(msg, ...args) : 0;
   },
   info(msg, ...args) {
     console.log(`🚧 ${msg}`, ...args);
+    return 0;
+  },
+  infoIf(cond, msg, ...args) {
+    return cond ? this.info(msg, ...args) : 0;
   },
   warn(msg, ...args) {
-    console.warn(`🟡 \x1B[1;33m${msg}!\x1B[0m`, ...args);
+    console.warn(`🟡 \x1B[1;33m${msg}\x1B[0m`, ...args);
+    return 0;
+  },
+  warnIf(cond, msg, ...args) {
+    return cond ? this.warn(msg, ...args) : 0;
   },
 }); // log
 
 module.exports = {
-  distPackageJSON,
+  fileExists,
+  folderExists,
   log,
+  packageJSON,
   run,
 };
