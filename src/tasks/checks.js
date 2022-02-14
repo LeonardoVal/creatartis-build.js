@@ -1,22 +1,27 @@
-const {
-  distPackageJSON, log, run,
-} = require('./common');
+const { log, packageJSON, run } = require('./common');
 
 async function taskLint() {
-  const ignored = ['/dist', '/node_modules', '/docs']
-    .map((pattern) => `--ignore-pattern ${pattern}`)
-    .join(' ');
-  return run(`npx eslint . --ext js,jsx --quiet ${ignored}`);
+  return run('npx eslint . --ext js,jsx --quiet');
 }
 
+const packageChecks = {
+  author: (value) => typeof value === 'string' && value.length > 0,
+  description: (value) => typeof value === 'string' && value.length > 0,
+  dependencies: (value) => typeof value === 'object' && !!value,
+  files: (value) => Array.isArray(value) && value.length > 0,
+  jest: (value) => typeof value === 'object' && !!value,
+  keywords: (value) => Array.isArray(value) && value.length > 0,
+  license: (value) => typeof value === 'string' && value.length > 0,
+  main: (value) => typeof value === 'string' && value.length > 0,
+  name: (value) => typeof value === 'string' && value.length > 0,
+  scripts: (value) => typeof value === 'object' && !!value,
+  version: (value) => typeof value === 'string' && value.length > 0,
+};
+
 const checkPackageJSON = () => {
-  const pkg = distPackageJSON();
-  const requiredFields = [
-    'author', 'babel', 'description', 'eslintConfig', 'eslintIgnore', 'jest',
-    'keywords', 'license', 'main', 'module', 'scripts', 'version',
-  ];
-  requiredFields.forEach((fieldName) => {
-    if (!pkg[fieldName]) {
+  const pkg = packageJSON();
+  Object.entries(packageChecks).forEach(([fieldName, checkFun]) => {
+    if (!checkFun(pkg[fieldName])) {
       log.warn(`Missing field ${fieldName} from package.json!`);
     }
   });
@@ -25,14 +30,11 @@ const checkPackageJSON = () => {
 
 async function taskCheck(type) {
   let result = 0;
-  if (!type || type === 'lint') {
-    result = await taskLint();
-    if (result !== 0) {
-      return result;
-    }
+  if (result === 0 && (!type || type === 'lint' || type === 'code')) {
+    result ||= await taskLint();
   }
-  if (!type || type === 'pkg') {
-    result = checkPackageJSON();
+  if (result === 0 && (!type || type === 'pkg')) {
+    result ||= checkPackageJSON();
   }
   return result;
 }
