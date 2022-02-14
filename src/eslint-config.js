@@ -9,9 +9,9 @@ module.exports = {
     document: 'readonly',
     window: 'readonly',
   },
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2021,
   },
   plugins: ['react', 'jest'],
   rules: {
