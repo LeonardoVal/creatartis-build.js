@@ -4,7 +4,7 @@ module.exports = {
     es6: true,
     'jest/globals': true,
   },
-  extends: ['airbnb'],
+  extends: ['airbnb/base'],
   globals: {
     document: 'readonly',
     window: 'readonly',

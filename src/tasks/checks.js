@@ -9,7 +9,6 @@ const packageChecks = {
   description: (value) => typeof value === 'string' && value.length > 0,
   dependencies: (value) => typeof value === 'object' && !!value,
   files: (value) => Array.isArray(value) && value.length > 0,
-  jest: (value) => typeof value === 'object' && !!value,
   keywords: (value) => Array.isArray(value) && value.length > 0,
   license: (value) => typeof value === 'string' && value.length > 0,
   main: (value) => typeof value === 'string' && value.length > 0,
@@ -31,10 +30,10 @@ const checkPackageJSON = () => {
 async function taskCheck(type) {
   let result = 0;
   if (result === 0 && (!type || type === 'lint' || type === 'code')) {
-    result ||= await taskLint();
+    result = result || await taskLint();
   }
   if (result === 0 && (!type || type === 'pkg')) {
-    result ||= checkPackageJSON();
+    result = result || checkPackageJSON();
   }
   return result;
 }
