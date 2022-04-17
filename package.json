@@ -11,6 +11,9 @@
     "LICENSE.md",
     "README.md"
   ],
+  "engines": {
+    "node": ">=16.x.x"
+  },
   "bin": {
     "creatartis-build": "./dist/creatartis-build.js"
   },
