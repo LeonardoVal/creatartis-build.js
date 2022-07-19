@@ -4,7 +4,9 @@ module.exports = {
     es6: true,
     'jest/globals': true,
   },
-  extends: ['airbnb/base'],
+  extends: [
+    'airbnb/base',
+  ],
   globals: {
     document: 'readonly',
     window: 'readonly',
@@ -17,6 +19,7 @@ module.exports = {
   plugins: ['jest'],
   rules: {
     'class-methods-use-this': 'off',
+    'function-paren-newline': ['error', 'consistent'],
     'no-await-in-loop': 'off',
     'no-mixed-operators': 'off',
     'no-nested-ternary': 'off',
@@ -24,5 +27,16 @@ module.exports = {
     'no-restricted-syntax': ['error', 'WithStatement', 'BinaryExpression[operator=\'in\']'],
     'no-underscore-dangle': 'off',
     'no-unused-vars': ['error', { vars: 'local', args: 'none' }],
+  },
+  settings: {
+    'import/extensions': ['.js', '.jsx'],
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx'],
+      },
+    },
+    react: {
+      version: 'detect',
+    },
   },
 };
